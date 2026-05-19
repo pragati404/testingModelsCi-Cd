@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v2
@@ -19,11 +19,11 @@ jobs:
       - name: Run V_select tests
         uses: matlab-actions/run-tests@v2
         with:
-          source-folder: models
+          source-folder: .
           test-results-junit: test-results/results.xml
 
       - name: Upload test results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-results
