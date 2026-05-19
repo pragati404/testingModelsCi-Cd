@@ -15,6 +15,8 @@ jobs:
 
       - name: Setup MATLAB
         uses: matlab-actions/setup-matlab@v2
+        with:
+          products: Simulink
 
       - name: Run V_select tests
         uses: matlab-actions/run-tests@v2
