@@ -43,7 +43,6 @@ classdef TestVSelect < matlab.unittest.TestCase
         end
 
         function testAllNegativeDefaultCase(tc)
-            % Input: all negative → fallback → output = 0.0001
             load_system('V_select');
             t = (0:0.1:0.4)';
             u = single([-3; -5; -7; -2; -4]);
@@ -51,16 +50,19 @@ classdef TestVSelect < matlab.unittest.TestCase
             in = in.setExternalInput(timeseries(u, t));
             simOut = sim(in);
             out = simOut.yout{1}.Values.Data(end);
+
             if abs(out - 0.0001) < 1e-6
+                fprintf('\n>>> DEFAULT CASE TRIGGERED: output = %f (fallback value)\n', out);
                 tc.log('Default case triggered correctly: output = 0.0001');
                 tc.verifyEqual(out, single(0.0001), 'AbsTol', single(1e-6));
             else
-                tc.verifyGreaterThan(out, 0, ...
-                    'Output must still be positive');
+                fprintf('\n>>> NORMAL CASE: output = %f (mean or median used)\n', out);
+                tc.log('Normal case: output is above fallback value');
+                tc.verifyGreaterThan(out, 0, 'Output must still be positive');
             end
             close_system('V_select', 0);
         end
-
+        
         function testOutputNeverBelowFallback(tc)
             % Output must never go below 0.0001 under any input
             load_system('V_select');
